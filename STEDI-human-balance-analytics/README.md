@@ -11,6 +11,9 @@ SQL scripts:
 #### Customer Landing Query Result
 ![customer_landing](./pictures/customer_landing.jpg)
 
+#### Customer Landing with shareWithResearchAsOfDate is null
+![customer_landing_null](./pictures/customer_landing_null.jpg)
+
 #### Accelerometer Landing Query Result
 ![accelerometer_landing](./pictures/accelerometer_landing.jpg)
 
@@ -25,6 +28,9 @@ Job scripts:
 
 #### Customer Trusted Query Result
 ![customer_trusted](./pictures/customer_trusted.jpg)
+
+#### Customer Landing with shareWithResearchAsOfDate is not null
+![customer_trusted_not_null](./pictures/customer_trusted_not_null.jpg)
 
 #### Accelerometer Trusted Query Result
 ![accelerometer_trusted](./pictures/accelerometer_trusted.jpg)
