@@ -27,26 +27,25 @@ DEFAULT_DATA_QUALITY_RULESET = """
 """
 
 # Script generated for node Accelerometer Trusted
-AccelerometerTrusted_node1734340298476 = glueContext.create_dynamic_frame.from_catalog(database="stedi", table_name="accelerometer_trusted", transformation_ctx="AccelerometerTrusted_node1734340298476")
+AccelerometerTrusted_node1734874382516 = glueContext.create_dynamic_frame.from_catalog(database="stedi_db", table_name="accelerometer_trusted", transformation_ctx="AccelerometerTrusted_node1734874382516")
 
 # Script generated for node Step Trainer Trusted
-StepTrainerTrusted_node1734340298222 = glueContext.create_dynamic_frame.from_catalog(database="stedi", table_name="step_trainer_trusted", transformation_ctx="StepTrainerTrusted_node1734340298222")
+StepTrainerTrusted_node1734874382859 = glueContext.create_dynamic_frame.from_catalog(database="stedi_db", table_name="step_trainer_trusted", transformation_ctx="StepTrainerTrusted_node1734874382859")
 
 # Script generated for node Join
-SqlQuery7494 = '''
+SqlQuery2254 = '''
 select * from s
 join a on s.sensorreadingtime = a.timestamp;
-
 '''
-Join_node1734344422365 = sparkSqlQuery(glueContext, query = SqlQuery7494, mapping = {"s":StepTrainerTrusted_node1734340298222, "a":AccelerometerTrusted_node1734340298476}, transformation_ctx = "Join_node1734344422365")
+Join_node1734874390518 = sparkSqlQuery(glueContext, query = SqlQuery2254, mapping = {"a":AccelerometerTrusted_node1734874382516, "s":StepTrainerTrusted_node1734874382859}, transformation_ctx = "Join_node1734874390518")
 
 # Script generated for node Drop Fields
-DropFields_node1734341058267 = ApplyMapping.apply(frame=Join_node1734344422365, mappings=[("sensorreadingtime", "long", "sensorreadingtime", "long"), ("serialnumber", "string", "serialnumber", "string"), ("distancefromobject", "int", "distancefromobject", "int"), ("timestamp", "long", "timestamp", "long"), ("x", "double", "x", "double"), ("y", "double", "y", "double"), ("z", "double", "z", "double")], transformation_ctx="DropFields_node1734341058267")
+DropFields_node1734879067260 = DropFields.apply(frame=Join_node1734874390518, paths=["user"], transformation_ctx="DropFields_node1734879067260")
 
 # Script generated for node Step Trainer Curated
-EvaluateDataQuality().process_rows(frame=DropFields_node1734341058267, ruleset=DEFAULT_DATA_QUALITY_RULESET, publishing_options={"dataQualityEvaluationContext": "EvaluateDataQuality_node1734340874373", "enableDataQualityResultsPublishing": True}, additional_options={"dataQualityResultsPublishing.strategy": "BEST_EFFORT", "observations.scope": "ALL"})
-StepTrainerCurated_node1734341188687 = glueContext.getSink(path="s3://stedi-lake-house/step_trainer/curated/", connection_type="s3", updateBehavior="UPDATE_IN_DATABASE", partitionKeys=[], enableUpdateCatalog=True, transformation_ctx="StepTrainerCurated_node1734341188687")
-StepTrainerCurated_node1734341188687.setCatalogInfo(catalogDatabase="stedi",catalogTableName="machine_learning_curated")
-StepTrainerCurated_node1734341188687.setFormat("json")
-StepTrainerCurated_node1734341188687.writeFrame(DropFields_node1734341058267)
+EvaluateDataQuality().process_rows(frame=DropFields_node1734879067260, ruleset=DEFAULT_DATA_QUALITY_RULESET, publishing_options={"dataQualityEvaluationContext": "EvaluateDataQuality_node1734874352935", "enableDataQualityResultsPublishing": True}, additional_options={"dataQualityResultsPublishing.strategy": "BEST_EFFORT", "observations.scope": "ALL"})
+StepTrainerCurated_node1734874396791 = glueContext.getSink(path="s3://stedi-lakehouse/step_trainer/curated/", connection_type="s3", updateBehavior="UPDATE_IN_DATABASE", partitionKeys=[], enableUpdateCatalog=True, transformation_ctx="StepTrainerCurated_node1734874396791")
+StepTrainerCurated_node1734874396791.setCatalogInfo(catalogDatabase="stedi_db",catalogTableName="machine_learning_curated")
+StepTrainerCurated_node1734874396791.setFormat("json")
+StepTrainerCurated_node1734874396791.writeFrame(DropFields_node1734879067260)
 job.commit()
