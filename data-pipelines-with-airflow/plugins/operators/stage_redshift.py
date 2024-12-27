@@ -33,7 +33,7 @@ class StageToRedshiftOperator(BaseOperator):
         self.s3_key = s3_key
         self.log_json_file = log_json_file
         self.aws_credentials_id = aws_credentials_id
-        self.execution_date = kwargs["execution_date"]
+        self.execution_date = kwargs.get("execution_date")
 
     def execute(self, context):
         metastoreBackend = MetastoreBackend()
