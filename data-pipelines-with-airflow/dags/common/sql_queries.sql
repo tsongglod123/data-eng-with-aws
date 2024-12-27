@@ -1,87 +1,91 @@
-DROP TABLE IF EXISTS staging_events;
-DROP TABLE IF EXISTS staging_songs;
-DROP TABLE IF EXISTS songplays;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS songs;
-DROP TABLE IF EXISTS artists;
-DROP TABLE IF EXISTS time;
+DROP table IF EXISTS public.artists;
+DROP table IF EXISTS public.songplays;
+DROP table IF EXISTS public.songs;
+DROP table IF EXISTS public.staging_events;
+DROP table IF EXISTS public.staging_songs;
+DROP table IF EXISTS public."time";
+DROP table IF EXISTS public.users;
 
-CREATE TABLE IF NOT EXISTS staging_events (
-    artist VARCHAR,
-    auth VARCHAR,
-    firstName VARCHAR,
-    gender CHAR(1),
-    itemInSession INTEGER,
-    lastName VARCHAR,
-    length FLOAT,
-    level VARCHAR,
-    location TEXT,
-    method VARCHAR,
-    page VARCHAR,
-    registration FLOAT,
-    sessionId INTEGER,
-    song VARCHAR,
-    status INTEGER,
-    ts BIGINT,
-    userAgent TEXT,
-    userId INTEGER
+CREATE TABLE public.artists (
+	artistid varchar(256) NOT NULL,
+	name varchar(512),
+	location varchar(512),
+	lattitude numeric(18,0),
+	longitude numeric(18,0)
 );
 
-CREATE TABLE IF NOT EXISTS staging_songs (
-    num_songs INTEGER,
-    artist_id VARCHAR,
-    artist_name VARCHAR,
-    artist_latitude FLOAT,
-    artist_longitude FLOAT,
-    artist_location TEXT,
-    song_id VARCHAR,
-    title VARCHAR,
-    duration FLOAT,
-    year INTEGER
+CREATE TABLE public.songplays (
+	playid varchar(32) NOT NULL,
+	start_time timestamp NOT NULL,
+	userid int4 NOT NULL,
+	"level" varchar(256),
+	songid varchar(256),
+	artistid varchar(256),
+	sessionid int4,
+	location varchar(256),
+	user_agent varchar(256),
+	CONSTRAINT songplays_pkey PRIMARY KEY (playid)
 );
 
-CREATE TABLE IF NOT EXISTS songplays (
-    songplay_id INTEGER IDENTITY(0,1) NOT NULL PRIMARY KEY,
-    start_time TIMESTAMP,
-    user_id INTEGER,
-    level VARCHAR,
-    song_id VARCHAR,
-    artist_id VARCHAR,
-    session_id INTEGER,
-    location TEXT,
-    user_agent TEXT
+CREATE TABLE public.songs (
+	songid varchar(256) NOT NULL,
+	title varchar(512),
+	artistid varchar(256),
+	"year" int4,
+	duration numeric(18,0),
+	CONSTRAINT songs_pkey PRIMARY KEY (songid)
 );
 
-CREATE TABLE IF NOT EXISTS users (
-    user_id INTEGER NOT NULL PRIMARY KEY,
-    first_name VARCHAR,
-    last_name VARCHAR,
-    gender CHAR(1),
-    level VARCHAR
+CREATE TABLE public.staging_events (
+	artist varchar(256),
+	auth varchar(256),
+	firstname varchar(256),
+	gender varchar(256),
+	iteminsession int4,
+	lastname varchar(256),
+	length numeric(18,0),
+	"level" varchar(256),
+	location varchar(256),
+	"method" varchar(256),
+	page varchar(256),
+	registration numeric(18,0),
+	sessionid int4,
+	song varchar(256),
+	status int4,
+	ts int8,
+	useragent varchar(256),
+	userid int4
 );
 
-CREATE TABLE IF NOT EXISTS songs (
-    song_id VARCHAR NOT NULL PRIMARY KEY,
-    title VARCHAR,
-    artist_id VARCHAR,
-    year INT,
-    duration FLOAT
+CREATE TABLE public.staging_songs (
+	num_songs int4,
+	artist_id varchar(256),
+	artist_name varchar(512),
+	artist_latitude numeric(18,0),
+	artist_longitude numeric(18,0),
+	artist_location varchar(512),
+	song_id varchar(256),
+	title varchar(512),
+	duration numeric(18,0),
+	"year" int4
 );
 
-CREATE TABLE IF NOT EXISTS artists (
-    artist_id VARCHAR NOT NULL PRIMARY KEY,
-    name VARCHAR,
-    location TEXT ,
-    latitude FLOAT ,
-    longitude FLOAT
-);
+CREATE TABLE public."time" (
+	start_time timestamp NOT NULL,
+	"hour" int4,
+	"day" int4,
+	week int4,
+	"month" varchar(256),
+	"year" int4,
+	weekday varchar(256),
+	CONSTRAINT time_pkey PRIMARY KEY (start_time)
+) ;
 
-CREATE TABLE IF NOT EXISTS time (
-    start_time TIMESTAMP NOT NULL PRIMARY KEY,
-    hour INTEGER,
-    day INTEGER,
-    week INTEGER,
-    month INTEGER,
-    year INTEGER,
-    weekday VARCHAR
+CREATE TABLE public.users (
+	userid int4 NOT NULL,
+	first_name varchar(256),
+	last_name varchar(256),
+	gender varchar(256),
+	"level" varchar(256),
+	CONSTRAINT users_pkey PRIMARY KEY (userid)
 );
